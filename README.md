@@ -6,14 +6,14 @@
 
 *One install for the complete governance stack — kernel · trust mesh · runtime supervisor · reliability engineering*
 
-[![PyPI](https://img.shields.io/badge/pypi-agent--governance-blue.svg)](https://pypi.org/project/agent-governance/)
+[![PyPI](https://img.shields.io/badge/pypi-ai--agent--governance-blue.svg)](https://pypi.org/project/ai-agent-governance/)
 [![GitHub Stars](https://img.shields.io/github/stars/imran-siddique/agent-governance?style=social)](https://github.com/imran-siddique/agent-governance/stargazers)
 [![Sponsor](https://img.shields.io/badge/sponsor-❤️-ff69b4)](https://github.com/sponsors/imran-siddique)
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ```
-pip install agent-governance[full]
+pip install ai-agent-governance[full]
 ```
 
 [Architecture](#architecture) • [Quick Start](#quick-start) • [Components](#components) • [Why Unified?](#why-a-unified-governance-stack) • [Ecosystem](#the-agent-governance-ecosystem)
@@ -31,7 +31,7 @@ pip install agent-governance[full]
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                      agent-governance                           │
-│                  pip install agent-governance[full]              │
+│                  pip install ai-agent-governance[full]           │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │   ┌───────────────────┐      ┌───────────────────────────┐     │
@@ -77,14 +77,14 @@ Install only what you need:
 
 ```bash
 # Core: kernel + trust mesh
-pip install agent-governance
+pip install ai-agent-governance
 
 # Full stack: adds hypervisor + SRE
-pip install agent-governance[full]
+pip install ai-agent-governance[full]
 
 # À la carte
-pip install agent-governance[hypervisor]
-pip install agent-governance[sre]
+pip install ai-agent-governance[hypervisor]
+pip install ai-agent-governance[sre]
 ```
 
 ---

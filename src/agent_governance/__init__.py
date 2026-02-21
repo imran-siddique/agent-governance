@@ -2,7 +2,7 @@
 Agent Governance - The complete AI agent governance stack.
 
 Install the full stack:
-    pip install agent-governance[full]
+    pip install ai-agent-governance[full]
 
 Components:
     - agent-os-kernel: Governance kernel with policy enforcement
