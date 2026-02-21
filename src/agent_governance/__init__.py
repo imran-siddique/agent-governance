@@ -1,0 +1,25 @@
+"""
+Agent Governance - The complete AI agent governance stack.
+
+Install the full stack:
+    pip install agent-governance[full]
+
+Components:
+    - agent-os-kernel: Governance kernel with policy enforcement
+    - agentmesh-platform: Zero-trust agent communication (SSL for AI Agents)
+    - agent-hypervisor: Runtime supervisor with execution rings
+    - agent-sre: Site reliability engineering for AI agents
+"""
+
+__version__ = "1.0.0"
+
+# Re-export core components for convenience
+try:
+    from agent_os import StatelessKernel, ExecutionContext
+except ImportError:
+    pass
+
+try:
+    from agentmesh import TrustManager
+except ImportError:
+    pass
