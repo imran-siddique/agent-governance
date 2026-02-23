@@ -168,12 +168,12 @@ MIT — see [LICENSE](LICENSE) for details.
 
 
 
-## Framework - Specific Install Examples
+## Framework-Specific Install Examples
 
 
 ### LangChain
 ```bash
-pip install langchain agent-governance
+pip install langchain ai-agent-governance
 ```
 
 --- 
@@ -181,7 +181,7 @@ pip install langchain agent-governance
 
 ### CrewAI
 ```bash
-pip install crewai agent-governance
+pip install crewai ai-agent-governance
 ```
 
 
@@ -190,5 +190,5 @@ pip install crewai agent-governance
 
 ### AutoGen
 ```bash
-pip install pyautogen agent-governance
+pip install pyautogen ai-agent-governance
 ```
