@@ -165,3 +165,30 @@ MIT — see [LICENSE](LICENSE) for details.
 *Building the governance layer for the agentic era*
 
 </div>
+
+
+
+## Framework-Specific Install Examples
+
+
+### LangChain
+```bash
+pip install langchain ai-agent-governance
+```
+
+--- 
+
+
+### CrewAI
+```bash
+pip install crewai ai-agent-governance
+```
+
+
+---
+
+
+### AutoGen
+```bash
+pip install pyautogen ai-agent-governance
+```
