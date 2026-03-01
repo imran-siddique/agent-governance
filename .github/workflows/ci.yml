@@ -31,7 +31,7 @@ jobs:
         run: |
           python -c "
           from agent_os import StatelessKernel, ExecutionContext
-          from agentmesh import TrustManager
+          from agentmesh import AgentIdentity
           print('Core imports OK')
           "
 
