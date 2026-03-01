@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ai-agent-governance"
-version = "1.0.0"
+version = "1.0.1"
 description = "The complete AI agent governance stack - kernel, trust mesh, runtime supervisor, and reliability engineering"
 readme = "README.md"
 license = {text = "MIT"}
