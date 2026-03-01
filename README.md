@@ -143,14 +143,55 @@ Each component works standalone, but they're designed to work together. The kern
 
 ---
 
+## Examples
+
+See the [`examples/`](examples/) directory for runnable demos:
+
+```bash
+# Quick start — boot the governance stack in 30 lines
+python examples/quickstart.py
+
+# Full stack — all 4 layers working together
+python examples/governed_agent.py
+```
+
+---
+
+## Framework Integration
+
+```bash
+# LangChain
+pip install langchain ai-agent-governance
+
+# CrewAI
+pip install crewai ai-agent-governance
+
+# AutoGen
+pip install pyautogen ai-agent-governance
+```
+
+---
+
+## 🗺️ Roadmap
+
+| Quarter | Milestone |
+|---------|-----------|
+| **Q1 2026** | ✅ Unified meta-package, 4 components integrated, PyPI published |
+| **Q2 2026** | Cross-component integration tests, unified CLI, dashboard UI |
+| **Q3 2026** | Helm chart for Kubernetes, managed cloud preview |
+| **Q4 2026** | SOC2 Type II certification, enterprise support tier |
+
+---
+
 ## Contributing
 
-Contributions are welcome! Please see the individual component repos for contribution guidelines:
+We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
 
-- [Agent OS](https://github.com/imran-siddique/agent-os)
-- [AgentMesh](https://github.com/imran-siddique/agent-mesh)
-- [Agent Hypervisor](https://github.com/imran-siddique/agent-hypervisor)
-- [Agent SRE](https://github.com/imran-siddique/agent-sre)
+For component-specific contributions, see:
+- [Agent OS](https://github.com/imran-siddique/agent-os/blob/master/CONTRIBUTING.md)
+- [AgentMesh](https://github.com/imran-siddique/agent-mesh/blob/master/CONTRIBUTING.md)
+- [Agent Hypervisor](https://github.com/imran-siddique/agent-hypervisor/blob/master/CONTRIBUTING.md)
+- [Agent SRE](https://github.com/imran-siddique/agent-sre/blob/master/CONTRIBUTING.md)
 
 ## License
 
@@ -165,30 +206,3 @@ MIT — see [LICENSE](LICENSE) for details.
 *Building the governance layer for the agentic era*
 
 </div>
-
-
-
-## Framework-Specific Install Examples
-
-
-### LangChain
-```bash
-pip install langchain ai-agent-governance
-```
-
---- 
-
-
-### CrewAI
-```bash
-pip install crewai ai-agent-governance
-```
-
-
----
-
-
-### AutoGen
-```bash
-pip install pyautogen ai-agent-governance
-```
