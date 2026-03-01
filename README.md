@@ -7,6 +7,7 @@
 *One install for the complete governance stack — kernel · trust mesh · runtime supervisor · reliability engineering*
 
 [![PyPI](https://img.shields.io/badge/pypi-ai--agent--governance-blue.svg)](https://pypi.org/project/ai-agent-governance/)
+[![CI](https://github.com/imran-siddique/agent-governance/actions/workflows/ci.yml/badge.svg)](https://github.com/imran-siddique/agent-governance/actions/workflows/ci.yml)
 [![GitHub Stars](https://img.shields.io/github/stars/imran-siddique/agent-governance?style=social)](https://github.com/imran-siddique/agent-governance/stargazers)
 [![Sponsor](https://img.shields.io/badge/sponsor-❤️-ff69b4)](https://github.com/sponsors/imran-siddique)
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://python.org)

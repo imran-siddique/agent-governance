@@ -24,5 +24,16 @@ jobs:
       - name: Install package
         run: pip install -e .[full]
 
-      - name: Import test
-        run: python -c "import agent_governance; print(agent_governance.__version__)"
+      - name: Import test — core
+        run: python -c "import agent_governance; print(f'agent-governance v{agent_governance.__version__}')"
+
+      - name: Import test — all components
+        run: |
+          python -c "
+          from agent_os import StatelessKernel, ExecutionContext
+          from agentmesh import TrustManager
+          print('Core imports OK')
+          "
+
+      - name: Verify version consistency
+        run: python -c "import agent_governance; assert agent_governance.__version__, 'Version not set'"
