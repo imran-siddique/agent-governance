@@ -1,16 +1,16 @@
 """
 Agent Governance — Quick Start
 
-Boot the full governance stack in under 30 lines.
-Shows: kernel init, trust registration, policy check, audit trail.
+Boot the full governance stack and execute a governed action.
 
 Usage:
     pip install ai-agent-governance
     python examples/quickstart.py
 """
 
+import asyncio
 from agent_os import StatelessKernel, ExecutionContext
-from agentmesh import TrustManager
+from agentmesh import AgentIdentity
 
 # 1. Boot the governance kernel
 kernel = StatelessKernel()
@@ -19,20 +19,36 @@ print("✅ Governance kernel booted")
 # 2. Create an execution context for our agent
 ctx = ExecutionContext(
     agent_id="quickstart-agent",
-    capabilities=["read", "write"],
+    policies=["read_only"],
 )
 
-# 3. Register with the trust mesh
-trust = TrustManager()
-trust.register_agent(ctx)
-print(f"✅ Agent registered with trust score: {trust.get_trust_score(ctx.agent_id)}")
+# 3. Register a zero-trust agent identity
+identity = AgentIdentity.create(
+    name="quickstart-agent",
+    sponsor="demo@example.com",
+    capabilities=["read:data", "write:reports"],
+)
+print(f"✅ Agent identity created: {identity.did}")
 
-# 4. Check a policy before executing an action
-result = kernel.check_policy(ctx, action="file_read", resource="/data/reports.csv")
-print(f"✅ Policy check: {'ALLOWED' if result.allowed else 'DENIED'} — {result.reason}")
 
-# 5. Log the action for audit
-kernel.audit_log(ctx, action="file_read", resource="/data/reports.csv", outcome=result)
-print("✅ Action logged to audit trail")
+async def main():
+    # 4. Execute a governed action
+    result = await kernel.execute(
+        action="database_query",
+        params={"query": "SELECT * FROM reports"},
+        context=ctx,
+    )
+    print(f"✅ Query result: success={result.success}")
 
-print("\n🎉 Governance stack is running! Your agent is now governed.")
+    # 5. Try a blocked action (write blocked by read_only policy)
+    result = await kernel.execute(
+        action="file_write",
+        params={"path": "/data/secret.txt", "content": "test"},
+        context=ctx,
+    )
+    print(f"✅ Write blocked: success={result.success}, signal={result.signal}")
+
+    print("\n🎉 Governance stack is running! Your agent is now governed.")
+
+
+asyncio.run(main())

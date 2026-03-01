@@ -62,16 +62,31 @@ pip install ai-agent-governance[full]
 ## Quick Start
 
 ```python
+import asyncio
 from agent_os import StatelessKernel, ExecutionContext
-from agentmesh import TrustManager
+from agentmesh import AgentIdentity
 
 # Boot the governance kernel
 kernel = StatelessKernel()
-ctx = ExecutionContext(agent_id="my-agent", capabilities=["read", "write"])
+ctx = ExecutionContext(agent_id="my-agent", policies=["read_only"])
 
 # Establish zero-trust agent identity
-trust = TrustManager()
-trust.register_agent(ctx)
+identity = AgentIdentity.create(
+    name="my-agent",
+    sponsor="alice@company.com",
+    capabilities=["read:data", "write:reports"],
+)
+
+# Execute a governed action
+async def main():
+    result = await kernel.execute(
+        action="database_query",
+        params={"query": "SELECT * FROM users"},
+        context=ctx,
+    )
+    print(f"Success: {result.success}, Data: {result.data}")
+
+asyncio.run(main())
 ```
 
 Install only what you need:

@@ -12,24 +12,26 @@ Usage:
     python examples/governed_agent.py
 """
 
+import asyncio
 from agent_os import StatelessKernel, ExecutionContext
-from agentmesh import TrustManager
+from agentmesh import AgentIdentity
 
 # Optional: import hypervisor and SRE if installed
 try:
-    from hypervisor import Hypervisor
+    from hypervisor import Hypervisor, SessionConfig, ConsistencyMode
     HAS_HYPERVISOR = True
 except ImportError:
     HAS_HYPERVISOR = False
 
 try:
-    from agent_sre import SREManager
+    from agent_sre import SLO, ErrorBudget
+    from agent_sre.slo.indicators import TaskSuccessRate
     HAS_SRE = True
 except ImportError:
     HAS_SRE = False
 
 
-def main():
+async def main():
     print("=" * 60)
     print("  Agent Governance — Full Stack Demo")
     print("=" * 60)
@@ -38,55 +40,70 @@ def main():
     kernel = StatelessKernel()
     ctx = ExecutionContext(
         agent_id="governed-agent-001",
-        capabilities=["read", "write", "execute"],
+        policies=["read_only"],
     )
-    print("\n🧠 [Agent OS] Kernel booted, context created")
+    print("\n[Agent OS] Kernel booted, context created")
 
     # --- Layer 2: Trust Mesh ---
-    trust = TrustManager()
-    trust.register_agent(ctx)
-    score = trust.get_trust_score(ctx.agent_id)
-    print(f"🔗 [AgentMesh] Agent registered — trust score: {score}")
+    identity = AgentIdentity.create(
+        name="governed-agent-001",
+        sponsor="admin@company.com",
+        capabilities=["read:data", "write:reports", "execute:queries"],
+    )
+    print(f"[AgentMesh] Agent registered — DID: {identity.did}")
 
     # --- Layer 3: Hypervisor ---
     if HAS_HYPERVISOR:
         hv = Hypervisor()
-        hv.register_agent(ctx.agent_id, ring=2)
-        print(f"⚡ [Hypervisor] Agent assigned to Ring 2 (standard privileges)")
+        session = await hv.create_session(
+            config=SessionConfig(consistency_mode=ConsistencyMode.EVENTUAL),
+            creator_did=identity.did,
+        )
+        print(f"[Hypervisor] Session created: {session.sso.session_id}")
     else:
-        print("⚡ [Hypervisor] Not installed — pip install ai-agent-governance[full]")
+        print("[Hypervisor] Not installed — pip install ai-agent-governance[full]")
 
     # --- Layer 4: SRE ---
     if HAS_SRE:
-        sre = SREManager()
-        sre.register_agent(ctx.agent_id)
-        health = sre.health_check(ctx.agent_id)
-        print(f"📊 [Agent SRE] Health check: {health.status}")
+        indicator = TaskSuccessRate(target=0.95)
+        slo = SLO(
+            name="agent-success-rate",
+            indicators=[indicator],
+            error_budget=ErrorBudget(total=1000, consumed=0),
+        )
+        indicator.record_task(success=True)
+        evaluation = slo.evaluate()
+        print(f"[Agent SRE] SLO evaluation: status={evaluation.value}")
     else:
-        print("📊 [Agent SRE] Not installed — pip install ai-agent-governance[full]")
+        print("[Agent SRE] Not installed — pip install ai-agent-governance[full]")
 
     # --- Execute a governed action ---
     print("\n--- Executing governed action ---")
 
-    action = "database_query"
-    resource = "SELECT * FROM users WHERE role = 'admin'"
+    result = await kernel.execute(
+        action="database_query",
+        params={"query": "SELECT * FROM users WHERE role = 'admin'"},
+        context=ctx,
+    )
+    print(f"Policy check: {'ALLOWED' if result.success else 'DENIED'}")
 
-    # Check policy
-    result = kernel.check_policy(ctx, action=action, resource=resource)
-    print(f"📋 Policy check: {'✅ ALLOWED' if result.allowed else '❌ DENIED'}")
-
-    if result.allowed:
-        # Log for audit
-        kernel.audit_log(ctx, action=action, resource=resource, outcome=result)
-        print(f"📝 Audit logged")
-        print(f"🎯 Action executed successfully under full governance")
+    if result.success:
+        print(f"Data: {result.data}")
     else:
-        print(f"🛑 Action blocked: {result.reason}")
+        print(f"Blocked — signal: {result.signal}")
+
+    # Try a write (should be blocked by read_only)
+    result = await kernel.execute(
+        action="file_write",
+        params={"path": "/etc/config", "content": "malicious"},
+        context=ctx,
+    )
+    print(f"Write attempt: {'ALLOWED' if result.success else 'BLOCKED'} (signal: {result.signal})")
 
     print("\n" + "=" * 60)
-    print("  All governance layers operational ✅")
+    print("  All governance layers operational")
     print("=" * 60)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
