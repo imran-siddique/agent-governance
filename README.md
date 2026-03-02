@@ -17,7 +17,7 @@
 pip install ai-agent-governance[full]
 ```
 
-[Architecture](#architecture) • [Quick Start](#quick-start) • [Components](#components) • [Why Unified?](#why-a-unified-governance-stack) • [Ecosystem](#the-agent-governance-ecosystem) • [Traction](docs/TRACTION.md)
+[Architecture](#architecture) • [Quick Start](#quick-start) • [Components](#components) • [Why Unified?](#why-a-unified-governance-stack) • [Ecosystem](#the-agent-governance-ecosystem) • [OWASP Compliance](docs/OWASP-COMPLIANCE.md) • [Traction](docs/TRACTION.md)
 
 </div>
 
@@ -196,6 +196,27 @@ pip install pyautogen ai-agent-governance
 | **Q2 2026** | Cross-component integration tests, unified CLI, dashboard UI |
 | **Q3 2026** | Helm chart for Kubernetes, managed cloud preview |
 | **Q4 2026** | SOC2 Type II certification, enterprise support tier |
+
+---
+
+## 🛡️ OWASP Agentic Top 10 Coverage
+
+The agent governance stack covers **9 of 10** risks from the [OWASP Top 10 for Agentic Applications (2026)](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/):
+
+| OWASP Risk | Coverage | Component |
+|-----------|----------|-----------|
+| Agent Goal Hijack | ✅ | Agent OS — Policy Engine |
+| Tool Misuse | ✅ | Agent OS — Capability Sandboxing |
+| Identity & Privilege Abuse | ✅ | AgentMesh — DID Identity |
+| Supply Chain Vulnerabilities | 🔄 Roadmap | Agent-SBOM (planned) |
+| Unexpected Code Execution | ✅ | Agent Hypervisor — Execution Rings |
+| Memory & Context Poisoning | ✅ | Agent OS — VFS + CMVK |
+| Insecure Inter-Agent Communication | ✅ | AgentMesh — IATP Protocol |
+| Cascading Failures | ✅ | Agent SRE — Circuit Breakers |
+| Human-Agent Trust Exploitation | ✅ | Agent OS — Approval Workflows |
+| Rogue Agents | ✅ | Agent Hypervisor — Kill Switch |
+
+**[→ Full OWASP compliance mapping with code examples](docs/OWASP-COMPLIANCE.md)**
 
 ---
 
