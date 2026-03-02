@@ -17,7 +17,7 @@
 pip install ai-agent-governance[full]
 ```
 
-[Architecture](#architecture) • [Quick Start](#quick-start) • [Components](#components) • [Why Unified?](#why-a-unified-governance-stack) • [Ecosystem](#the-agent-governance-ecosystem)
+[Architecture](#architecture) • [Quick Start](#quick-start) • [Components](#components) • [Why Unified?](#why-a-unified-governance-stack) • [Ecosystem](#the-agent-governance-ecosystem) • [Traction](docs/TRACTION.md)
 
 </div>
 
@@ -196,6 +196,14 @@ pip install pyautogen ai-agent-governance
 | **Q2 2026** | Cross-component integration tests, unified CLI, dashboard UI |
 | **Q3 2026** | Helm chart for Kubernetes, managed cloud preview |
 | **Q4 2026** | SOC2 Type II certification, enterprise support tier |
+
+---
+
+## 📈 Traction
+
+The ecosystem is growing — **3,000+ views, 9,400+ clones, and 1,278 unique developers** in the last 14 days alone. Traffic from Medium, Reddit, LinkedIn, Google, and even ChatGPT.
+
+**[→ See full traction report](docs/TRACTION.md)**
 
 ---
 
