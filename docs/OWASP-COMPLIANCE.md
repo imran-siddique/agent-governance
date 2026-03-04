@@ -15,7 +15,7 @@
 | ASI-01 | Agent Goal Hijack | ✅ Covered | Agent OS — Policy Engine |
 | ASI-02 | Tool Misuse & Exploitation | ✅ Covered | Agent OS — Capability Sandboxing |
 | ASI-03 | Identity & Privilege Abuse | ✅ Covered | AgentMesh — DID Identity & Trust Scoring |
-| ASI-04 | Supply Chain Vulnerabilities | 🔄 Roadmap | Agent-SBOM (planned) |
+| ASI-04 | Agentic Supply Chain Vulnerabilities | ✅ Covered | AgentMesh — AI-BOM (model + data + weights provenance) |
 | ASI-05 | Unexpected Code Execution | ✅ Covered | Agent Hypervisor — Execution Rings |
 | ASI-06 | Memory & Context Poisoning | ✅ Covered | Agent OS — VFS Policies + CMVK Verification |
 | ASI-07 | Insecure Inter-Agent Communication | ✅ Covered | AgentMesh — IATP + Encrypted Channels |
@@ -23,7 +23,7 @@
 | ASI-09 | Human-Agent Trust Exploitation | ✅ Covered | Agent OS — Approval Workflows |
 | ASI-10 | Rogue Agents | ✅ Covered | Agent Hypervisor — Kill Switch + Ring Isolation |
 
-**9 of 10 risks covered today. 1 on the roadmap.**
+**10 of 10 risks covered.** Full coverage achieved with AI-BOM v2.0 closing the supply chain gap.
 
 ---
 
@@ -102,19 +102,33 @@ identity = AgentIdentity.create(
 
 ### ASI-04: Agentic Supply Chain Vulnerabilities
 
-> *Vulnerabilities in third-party tools, plugins, or APIs cascade to agent behavior.*
+> *Vulnerabilities in third-party tools, plugins, agent registries, or runtime dependencies that agents use to act, plan, or delegate.*
 
-**Status:** 🔄 **On roadmap** — Agent-SBOM (Software Bill of Materials for agent tool chains) is planned.
+**Mitigation:** AgentMesh implements the **AI-BOM (AI Bill of Materials)** — a comprehensive standard for tracking the full AI supply chain including model provenance, dataset lineage, weights versioning, and software dependencies.
 
-**Current partial coverage:**
-- PyPI packages with pinned dependencies
-- CI security scanning (Bandit) on all repos
-- MIT-licensed, auditable source code
+- **Model Provenance** — base model ancestry, fine-tuning history, training cutoff dates
+- **Dataset Tracking** — training data, RAG sources, and evaluation benchmarks with data cards (PII status, bias assessment, consent tracking)
+- **Weights Versioning** — cryptographic hashes (SHA-256), quantization records, LoRA adapter metadata, SLSA build provenance
+- **Software Dependencies** — SPDX-aligned package tracking, CI security scanning (Bandit)
+- **Compliance Mapping** — tracks coverage against OWASP, CSA ATF, EU AI Act frameworks
+- **Cryptographic Signing** — Ed25519 signatures from sponsor and platform
 
-**Planned:**
-- Agent dependency provenance tracking
-- Tool chain integrity verification
-- Runtime dependency scanning
+```python
+# AI-BOM tracks the full supply chain
+ai_bom = {
+    "modelProvenance": {
+        "primary": {"provider": "anthropic", "model": "claude-3-sonnet"},
+        "fineTuning": {"method": "LoRA", "evaluationMetrics": {"accuracy": 0.94}},
+    },
+    "datasets": [
+        {"name": "FAQ KB", "type": "fine-tuning", "dataCard": {"piiStatus": "redacted"}},
+        {"name": "Product Docs", "type": "rag-source", "updateFrequency": "weekly"},
+    ],
+    "weights": {"hash": "sha256:...", "format": "safetensors", "precision": "bf16"},
+}
+```
+
+**Component:** [AgentMesh](https://github.com/imran-siddique/agent-mesh) — `docs/RFC_AGENT_SBOM.md` (AI-BOM v2.0 specification)
 
 ---
 
@@ -235,9 +249,42 @@ This single command installs the complete governance stack:
 | Layer | Package | OWASP Risks Covered |
 |-------|---------|-------------------|
 | **Kernel** | `agent-os-kernel` | ASI-01, ASI-02, ASI-06, ASI-09 |
-| **Trust Mesh** | `agentmesh-platform` | ASI-03, ASI-07, ASI-10 |
+| **Trust Mesh** | `agentmesh-platform` | ASI-03, ASI-04, ASI-07, ASI-10 |
 | **Hypervisor** | `agent-hypervisor` | ASI-05, ASI-10 |
 | **SRE** | `agent-sre` | ASI-08 |
+
+---
+
+## Cross-Cutting Principle: Least Agency
+
+The **Least Agency** principle is emphasized throughout the OWASP Agentic Top 10 as a foundational design principle for secure agentic systems. It states:
+
+> *Agents should be granted the minimum capabilities, permissions, and autonomy necessary to complete their assigned tasks.*
+
+Our stack enforces Least Agency at every layer:
+
+| Layer | Least Agency Mechanism |
+|-------|----------------------|
+| **Agent OS** | Policy engine enforces deny-by-default; agents must be explicitly granted each capability |
+| **AgentMesh** | DID identity with scoped capabilities; delegation requires narrowing (child ≤ parent) |
+| **Agent Hypervisor** | Execution rings (Ring 0–3) enforce privilege tiers; untrusted agents run in Ring 3 |
+| **Agent SRE** | Resource limits and error budgets cap agent impact radius |
+| **Agent Compliance** | Governance policies audit capability grants against Least Agency principle |
+
+```python
+# Example: Least Agency in action
+identity = AgentIdentity.create(
+    name="report-generator",
+    sponsor="admin@company.com",
+    capabilities=["read:reports"],  # Only what's needed — not "read:*"
+)
+
+# Delegation MUST narrow, never widen
+child = identity.delegate(
+    name="chart-helper",
+    capabilities=["read:reports:charts"],  # Subset of parent
+)
+```
 
 ---
 
