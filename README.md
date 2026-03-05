@@ -1,3 +1,6 @@
+> ⚠️ **DEPRECATED** — This project has moved to [microsoft/agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit). All future development happens there. Please star and follow the new repo!
+
+---
 <div align="center">
 
 # Agent Governance
